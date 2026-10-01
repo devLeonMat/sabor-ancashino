@@ -1,0 +1,111 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * `cine:` = experiencia cinematográfica (≥768px y sin reduced-motion).
+ * El layout de las escenas pinneadas se decide en CSS, no en JS:
+ * así no hay layout shift al hidratar y reduced-motion recibe una
+ * composición estática completa.
+ */
+@custom-variant cine (@media (min-width: 768px) and (prefers-reduced-motion: no-preference));
+@custom-variant still {
+  @media (max-width: 767px) {
+    @slot;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @slot;
+  }
+}
+
+@theme {
+  --color-ink: #120d0a;
+  --color-ink-2: #1b1410;
+  --color-ink-3: #2a1f18;
+  --color-cream: #f4ead9;
+  --color-cream-2: #d9ccb6;
+  --color-muted: #a8977f;
+  --color-aji: #d8862f;
+  --color-panca: #9b2f1c;
+  --color-panca-2: #c0462a;
+  --color-maiz: #e8c06a;
+  --color-whatsapp: #25d366;
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: dark;
+  --header-h: 4.5rem;
+}
+
+html {
+  background: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-aji);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-aji);
+  outline-offset: 3px;
+}
+
+/* Sin Lenis (reduced-motion), el ancla nativa sigue siendo suave solo si se permite. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+}
+
+[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+/* Integra fotografías no recortadas a la composición con un borde orgánico. */
+@utility mask-soft {
+  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+}
+
+@utility mask-plate {
+  -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+}
+
+@utility mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+/* Grano fotográfico muy sutil para unificar fotos de distintas fuentes. */
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
