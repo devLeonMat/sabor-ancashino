@@ -1,14 +1,21 @@
 import type { NextConfig } from "next";
 
+/**
+ * Sitio estático para GitHub Pages.
+ * PAGES_BASE_PATH lo inyecta el workflow (ej. "/sabor-ancashino"); en local queda vacío.
+ */
+const basePath = process.env.PAGES_BASE_PATH ?? "";
+
 const nextConfig: NextConfig = {
+  output: "export",
+  basePath,
+  trailingSlash: true,
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Sin servidor no hay optimizador de Next: el loader delega en el CDN de la imagen.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
     qualities: [60, 75, 85],
-    // Fotografías temporales. Al migrar a fotos propias en /public o un CDN
-    // del restaurante, agregar/quitar el patrón correspondiente.
-    // Patrón objeto (no `new URL`): con URL, la query vacía se exige literal
-    // y las URLs de Unsplash llevan parámetros (?auto=format&w=...).
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com", pathname: "/**" }],
   },
 };
 

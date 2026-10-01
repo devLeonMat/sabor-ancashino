@@ -6,7 +6,7 @@ export const siteConfig = {
   tagline: "Cocina ancashina hecha como en casa",
   description:
     "Cocina ancashina hecha como en casa, con ingredientes de nuestra tierra y recetas que atraviesan generaciones. Picante de cuy, llunca, cuchicanca y más.",
-  url: "https://sabor-ancashino.vercel.app", // TODO: dominio definitivo
+  url: "https://devleonmat.github.io/sabor-ancashino", // TODO: dominio definitivo
   locale: "es-PE",
   timeZone: "America/Lima",
   // TODO: número real con código de país, sin "+" ni espacios.

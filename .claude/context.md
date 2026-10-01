@@ -14,4 +14,4 @@
 - Datos reales: WhatsApp, teléfono, dirección, Maps, redes, dominio (`lib/site-config.ts`), precios de la carta.
 - Ajuste fino de tiempos/posiciones de las escenas tras revisión visual.
 - Lighthouse en build de producción (objetivo > 90).
-- Repo en GitHub + deploy con GitHub Actions → Vercel. Falta secreto VERCEL_TOKEN.
+- Deploy: GitHub Actions → GitHub Pages (export estático).

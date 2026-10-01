@@ -5,12 +5,13 @@
 Experiencia web gastronómica (cocina ancashina). Frontend-first, sin backend.
 
 ## Stack
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4 · Motion (`motion/react`) · GSAP + ScrollTrigger (`@gsap/react`) · Lenis · next/image · Vercel.
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4 · Motion (`motion/react`) · GSAP + ScrollTrigger (`@gsap/react`) · Lenis · next/image (loader propio) · GitHub Pages (export estático).
 Sin Three.js/WebGL. No agregar librerías sin justificación.
 
 ## Comandos
 - `pnpm dev` — servidor de desarrollo (http://localhost:3000)
-- `pnpm build` — build de producción (también genera tipos `LayoutProps`)
+- `pnpm build` — export estático a `out/` (también genera tipos `LayoutProps`)
+- `PAGES_BASE_PATH=/sabor-ancashino pnpm build` — build igual al de Pages
 - `pnpm lint` — ESLint
 - `pnpm exec tsc --noEmit` — typecheck (correr `pnpm build` o `pnpm next typegen` antes si falta `LayoutProps`)
 
@@ -49,7 +50,8 @@ Sin Three.js/WebGL. No agregar librerías sin justificación.
 - Edits quirúrgicos; mantener `.claude/context.md` al día.
 
 ## Despliegue
-- Repo: github.com/devLeonMat/sabor-ancashino (rama `main`).
-- `.github/workflows/deploy.yml`: lint + build en cada push/PR; deploy a Vercel con CLI (`main` → producción, PR → preview).
-- Requiere secreto de repo `VERCEL_TOKEN`. El proyecto Vercel (`sabor-ancashino`, scope `leonmatiaswork-9958s-projects`) lo crea/enlaza `vercel link` en el primer run.
-- No conectar además la integración Git de Vercel: duplicaría deploys.
+- Repo público: github.com/devLeonMat/sabor-ancashino (rama `main`).
+- `.github/workflows/pages.yml`: lint + build en cada push/PR; en `main` publica `out/` en GitHub Pages → https://devleonmat.github.io/sabor-ancashino/
+- `output: "export"` + `basePath` desde `PAGES_BASE_PATH` (lo da `actions/configure-pages`). En local basePath vacío.
+- Sin servidor: no hay Route Handlers, Server Actions ni optimizador de imágenes. `lib/image-loader.ts` delega el redimensionado al CDN (Unsplash). Fotos propias en `/public` se sirven sin optimizar → exportarlas ya en AVIF/WebP y tamaños adecuados, o usar un CDN con transformaciones.
+- Futuro backend (NestJS) vivirá en otro host; la landing lo consumiría desde el cliente.
